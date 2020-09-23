@@ -1,0 +1,41 @@
+﻿<!-- Alternative is from https://de.wikipedia.org/wiki/Wochentagsberechnung#Jahrhundertziffer -->
+<Table Hoverable="true" Bordered="true">
+    <TableHeader ThemeContrast="ThemeContrast.Light">
+        <TableRow>
+            <TableHeaderCell>Centenary</TableHeaderCell>
+            <TableHeaderCell>Numeric representation</TableHeaderCell>
+            <TableHeaderCell>Numeric representation (Alternative)</TableHeaderCell>
+        </TableRow>
+    </TableHeader>
+    <TableBody>
+        @foreach (var i in Enumerable.Range(16, 15))
+        {
+            <TableRow>
+                <TableRowHeader>@i</TableRowHeader>
+                <TableRowCell>@(GenerateRepresentationWithEfficientOption(GenerateNumericRepresentationTypeA(i)))</TableRowCell>
+                <TableRowCell>@(GenerateRepresentationWithEfficientOption(GenerateNumericRepresentationTypeB(i)))</TableRowCell>
+            </TableRow>
+        }
+    </TableBody>
+</Table>
+
+@code{
+    private static readonly int[] m_CentenaryValues = new int[] { 0, 5, 3, 1 };
+
+    private int GenerateNumericRepresentationTypeA(int pCentenary)
+    {
+        return m_CentenaryValues[pCentenary % 4];
+    }
+
+    private int GenerateNumericRepresentationTypeB(int pCentenary)
+    {
+        return GenerateNumericRepresentationTypeA(pCentenary) + 1;
+    }
+
+    private string GenerateRepresentationWithEfficientOption(int pNumber)
+    {
+        if (pNumber <= 3)
+            return pNumber.ToString();
+        return $"{pNumber} (or {pNumber - 7})";
+    }
+}
