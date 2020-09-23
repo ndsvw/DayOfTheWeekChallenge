@@ -1,0 +1,28 @@
+﻿<Table Hoverable="true" Bordered="true">
+    <TableHeader ThemeContrast="ThemeContrast.Light">
+        <TableRow>
+            <TableHeaderCell>Year XX...</TableHeaderCell>
+            <TableHeaderCell>Numeric representation</TableHeaderCell>
+        </TableRow>
+    </TableHeader>
+    <TableBody>
+        @foreach (var i in Enumerable.Range(0, 100))
+        {
+            <TableRow>
+                <TableRowHeader>@(i <= 9 ? $"0{i}" : i.ToString())</TableRowHeader>
+                <TableRowCell>@(GenerateNumericRepresentation(i))</TableRowCell>
+            </TableRow>
+        }
+    </TableBody>
+</Table>
+
+@code{
+    private string GenerateNumericRepresentation(int pYear)
+    {
+        int x = pYear / 4;
+        int num = (pYear + x) % 7;
+        if (num <= 3)
+            return num.ToString();
+        return $"{num} (or {num - 7})";
+    }
+}
