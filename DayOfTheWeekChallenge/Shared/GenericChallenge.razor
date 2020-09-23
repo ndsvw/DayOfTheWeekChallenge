@@ -1,0 +1,81 @@
+﻿@using Core;
+@using Microsoft.Extensions.Logging;
+@using System.Diagnostics;
+@inject ILogger<GenericChallenge<TAnswer>> logger;
+
+<div class="alert alert-primary font-weight-bold ml-4 mr-4" role="alert" style="display: inline-block">@Question</div>
+
+<div>
+    @foreach (var answerOption in AnswerOptions)
+    {
+        <AnswerOptionButton TAnswer="TAnswer"
+                            Value="@answerOption"
+                            Disabled="@(ChoosenAnswer != null)"
+                            Selected="@(Equals(answerOption, ChoosenAnswer))"
+                            OnClickCallback=ChooseAnswer
+                            ConvertValue="ConvertValue" />
+    }
+</div>
+
+@typeparam TAnswer
+
+@code{
+    private Stopwatch m_Stopwatch = new Stopwatch();
+
+    [Parameter]
+    public IEnumerable<TAnswer> AnswerOptions { get; set; }
+
+    [Parameter]
+    public Func<TAnswer, string> ConvertValue { get; set; }
+
+    [Parameter]
+    // generates a question and the corresponding answer.
+    public Func<QuestionAnswerPair<TAnswer>> QuestionGenerator { get; set; }
+
+    [Parameter]
+    public EventCallback<UserAnswer<TAnswer>> OnAnswerCallback { get; set; }
+
+    private TAnswer ChoosenAnswer { get; set; }
+
+    private TAnswer CorrectAnswer { get; set; }
+
+    private string Question { get; set; }
+
+    private void ChooseAnswer(TAnswer pAnswer)
+    {
+        m_Stopwatch.Stop();
+        ChoosenAnswer = pAnswer;
+        if (Equals(CorrectAnswer, ChoosenAnswer))
+        {
+            logger.LogInformation("correct");
+        }
+        else
+        {
+            logger.LogInformation("wrong. it was " + CorrectAnswer);
+        }
+        var userAnswer = new UserAnswer<TAnswer>
+        {
+            AnsweredCorrectly = Equals(CorrectAnswer, ChoosenAnswer),
+            Question = Question,
+            CorrectAnswer = CorrectAnswer,
+            GivenAnswer = pAnswer,
+            Time = m_Stopwatch.Elapsed
+        };
+        OnAnswerCallback.InvokeAsync(userAnswer);
+        GenerateNewQuestion();
+    }
+
+    private void GenerateNewQuestion()
+    {
+        var questionAndAnswer = QuestionGenerator();
+        Question = questionAndAnswer.Question;
+        CorrectAnswer = questionAndAnswer.Answer;
+        ChoosenAnswer = default;
+        m_Stopwatch.Restart();
+    }
+
+    protected override void OnInitialized()
+    {
+        GenerateNewQuestion();
+    }
+}

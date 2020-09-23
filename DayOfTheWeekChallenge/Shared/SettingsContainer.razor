@@ -1,0 +1,22 @@
+﻿@inherits LayoutComponentBase
+@using Core;
+@using Microsoft.Extensions.Logging;
+@using System.Globalization; 
+@inject ILogger<SettingsContainer> logger;
+
+    <div @attributes="InputAttributes">
+        <Alert Color="Color.Info" Visible="true">
+            <Heading Size="HeadingSize.Is4" TextColor="TextColor.Success">
+                Settings
+            </Heading>
+            @ChildContent
+        </Alert>
+    </div>
+
+@code{
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> InputAttributes { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

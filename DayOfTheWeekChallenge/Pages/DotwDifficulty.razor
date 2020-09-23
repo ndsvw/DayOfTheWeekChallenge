@@ -1,0 +1,42 @@
+﻿@page "/challenge"
+@using Microsoft.Extensions.Logging;
+@inject ILogger<DotwDifficulty> logger;
+
+<style>
+    .btn-difficulty {
+        min-width: 200px;
+    }
+</style>
+
+<h3>DayOfTheWeek difficulty</h3>
+
+<div class="container text-center">
+    <div class="row">
+        <div class="col-sm text-right">
+            <a href="challenge/@(CurrentYear)"><button class="btn mb-2 btn-secondary btn-difficulty" tabindex="-1">current year</button></a><br />
+        </div>
+        <div class="col-sm text-left">
+            <a href="challenge/@(CurrentYear)-@(CurrentYear + 1)"><button class="btn mb-2 btn-secondary btn-difficulty" tabindex="-1">current year &amp; next year</button></a><br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm text-right">
+            <a href="challenge/@(CurrentDecadeFirstYear)-@(CurrentDecadeFirstYear + 9)"><button class="btn mb-2 btn-secondary btn-difficulty" tabindex="-1">current decade</button></a><br />
+        </div>
+        <div class="col-sm text-left">
+            <a href="challenge/@(CurrentCenturyFirstYear)-@(CurrentCenturyFirstYear + 99)"><button class="btn mb-2 btn-secondary btn-difficulty" tabindex="-1">current century</button></a><br />
+        </div>
+    </div>
+    <br />
+    <a href="challenge/1900-2099"><button class="btn mb-2 btn-secondary btn-difficulty" tabindex="-1">1900 - 2099</button></a><br />
+    <a href="challenge/1900-2099"><button class="btn mb-2 btn-secondary btn-difficulty" tabindex="-1">1600 - 2099</button></a><br />
+    <a href="challenge/100-2999"><button class="btn mb-2 btn-secondary btn-difficulty" tabindex="-1">100 - 2999</button></a><br />
+</div>
+
+@code{
+    private int CurrentYear { get; } = DateTime.Today.Year;
+
+    private int CurrentDecadeFirstYear { get; } = DateTime.Today.Year - (DateTime.Today.Year % 10);
+
+    private int CurrentCenturyFirstYear { get; } = DateTime.Today.Year - (DateTime.Today.Year % 100);
+}

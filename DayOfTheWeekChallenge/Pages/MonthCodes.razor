@@ -1,0 +1,84 @@
+﻿@page "/month-codes"
+@using Core;
+@using Microsoft.Extensions.Logging;
+@inject ILogger<HundredYearCodes> logger;
+
+<h3>Month codes</h3>
+
+<div class="container text-center">
+    <SettingsContainer>
+        <div>
+            <SwitchElement @bind-Checked="@UseEfficientNumbers" />
+            <span class="align-middle">Use more efficient numbers (-3 to +3)</span>
+        </div>
+    </SettingsContainer>
+    <GenericChallenge TAnswer="int?"
+                AnswerOptions="@(UseEfficientNumbers ? m_EfficientNumericOrder : m_NumericOrder)"
+                QuestionGenerator="@GenerateQuestion"
+                OnAnswerCallback="OnAnswered"
+                ConvertValue="@(x => UseEfficientNumbers ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
+
+    <AnswerHistory UserAnswers="@m_UserAnswers"
+                   class="mt-5"
+                   ConvertValue="@(x => UseEfficientNumbers ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
+</div>
+
+@code {
+    private string[] m_MonthNames = new[]
+    {
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    };
+
+    private int[] m_Solutions = new[] { 6, 2, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4 };
+
+    private bool UseEfficientNumbers { get; set; }
+
+    private static int?[] m_NumericOrder = new int?[] { 0, 1, 2, 3, 4, 5, 6 };
+
+    private static int?[] m_EfficientNumericOrder = new int?[] { 4, 5, 6, 0, 1, 2, 3 };
+
+    private static string ConvertToString(int? p)
+    {
+        return p.ToString();
+    }
+
+    private static string ConvertToEfficientNumberString(int? p)
+    {
+        return (p >= 4 ? p - 7 : p).ToString();
+    }
+
+    private List<UserAnswer<int?>> m_UserAnswers = new List<UserAnswer<int?>>();
+
+    public void OnAnswered(UserAnswer<int?> pUserAnswer)
+    {
+        m_UserAnswers.Add(pUserAnswer);
+    }
+
+    private QuestionAnswerPair<int?> GenerateQuestion()
+    {
+        const int MinValue = 0;
+        const int MaxValue = 11;
+        var r = new Random();
+        var n = r.Next(MinValue, MaxValue + 1);
+        var question = m_MonthNames[n];
+        var answer = CalculateAnswer(n);
+        return new QuestionAnswerPair<int?>($"{question}", answer);
+    }
+
+    private int? CalculateAnswer(int question)
+    {
+        return m_Solutions[question];
+    } }
+
+<!-- https://docs.microsoft.com/de-de/aspnet/core/blazor/components/data-binding?view=aspnetcore-3.1#parent-to-child-binding-with-component-parameters -->

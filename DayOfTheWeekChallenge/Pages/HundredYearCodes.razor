@@ -1,0 +1,95 @@
+﻿@page "/hundred-year-codes"
+@page "/hundred-year-codes/{range}"
+@using Core;
+@using Microsoft.Extensions.Logging;
+@inject ILogger<HundredYearCodes> logger;
+
+<h3>HundredYear codes</h3>
+
+<div class="container text-center">
+    <SettingsContainer>
+        <div>
+            <SwitchElement @bind-Checked="@UseEfficientNumbers" />
+            <span class="align-middle">Use more efficient numbers (-3 to +3)</span>
+        </div>
+    </SettingsContainer>
+
+    <GenericChallenge TAnswer="int?"
+                      AnswerOptions="@(UseEfficientNumbers ? m_EfficientNumericOrder : m_NumericOrder)"
+                      QuestionGenerator="@GenerateQuestion"
+                      OnAnswerCallback="OnAnswered"
+                      ConvertValue="@(x => UseEfficientNumbers ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
+
+    <AnswerHistory UserAnswers="@m_UserAnswers"
+                   class="mt-5"
+                   ConvertValue="@(x => UseEfficientNumbers ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
+</div>
+
+
+
+@code { public (int start, int end)? m_Range;
+
+    [Parameter]
+    public string Range { set => m_Range = DetermineRangeFromString(value); }
+
+    private bool UseEfficientNumbers { get; set; }
+
+    private static int?[] m_NumericOrder = new int?[] { 0, 1, 2, 3, 4, 5, 6 };
+
+    private static int?[] m_EfficientNumericOrder = new int?[] { 4, 5, 6, 0, 1, 2, 3 };
+
+    private List<UserAnswer<int?>> m_UserAnswers = new List<UserAnswer<int?>>();
+
+    private static string ConvertToString(int? p)
+    {
+        return p.ToString();
+    }
+
+    private static string ConvertToEfficientNumberString(int? p)
+    {
+        return (p >= 4 ? p - 7 : p).ToString();
+    }
+
+    public void OnAnswered(UserAnswer<int?> pUserAnswer)
+    {
+        m_UserAnswers.Add(pUserAnswer);
+    }
+
+    private QuestionAnswerPair<int?> GenerateQuestion()
+    {
+        var MinValue = Math.Min(Math.Max(m_Range?.start ?? 0, 0), 99);
+        var MaxValue = Math.Min(Math.Max(m_Range?.end ?? 99, 0), 99);
+        if(MinValue > MaxValue)
+        {
+            MinValue = 0;
+            MaxValue = 99;
+        }
+        var r = new Random();
+        var question = r.Next(MinValue, MaxValue + 1);
+        var answer = CalculateAnswer(question);
+        return new QuestionAnswerPair<int?>($"{question}", answer);
+    }
+
+    private int? CalculateAnswer(int question)
+    {
+        int x = question / 4;
+        int y = question + x;
+        return y % 7;
+    }
+
+    private (int start, int end)? DetermineRangeFromString(string pInput)
+    {
+        if (pInput == null || pInput == String.Empty)
+            return null;
+        int start = 0;
+        int end = 0;
+        var parts = pInput.Split('-');
+        if (parts.Length == 1 && Int32.TryParse(pInput, out start))
+            return (start, start);
+        if (parts.Length == 2 && Int32.TryParse(parts[0], out start) && Int32.TryParse(parts[1], out end))
+            return (start, end);
+        throw new NotImplementedException("Could not get range from parameter");
+    }
+}
+
+<!-- https://docs.microsoft.com/de-de/aspnet/core/blazor/components/data-binding?view=aspnetcore-3.1#parent-to-child-binding-with-component-parameters -->

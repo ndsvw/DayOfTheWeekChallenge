@@ -1,0 +1,143 @@
+﻿@page "/challenge/{yearrange}"
+@using Core;
+@using Microsoft.Extensions.Logging;
+@using System.Globalization;
+@inject ILogger<DotwChallenge> logger;
+
+<h3>DayOfTheWeek challenge</h3>
+
+<div class="container text-center">
+    <SettingsContainer>
+        <RadioGroup TValue="AnswerFormatType" Name="answerFormat" @bind-CheckedValue="@ChoosenAnswerFormat">
+            @foreach (var val in Enum.GetValues(typeof(AnswerFormatType)).Cast<AnswerFormatType>())
+            {
+                <Radio TValue="AnswerFormatType" Value="@val">@(AnswerFormatTypeStrings[val])</Radio>
+            }
+        </RadioGroup>
+    </SettingsContainer>
+
+    <GenericChallenge TAnswer="int?"
+                      AnswerOptions="@(GetAnswerOptionsByFormat(ChoosenAnswerFormat))"
+                      QuestionGenerator="@GenerateQuestion"
+                      OnAnswerCallback="OnAnswered"
+                      ConvertValue="@DetermineFormatter()" />
+
+    <AnswerHistory TAnswer="int?"
+                   UserAnswers="@m_UserAnswers"
+                   class="mt-5"
+                   ConvertValue="@DetermineFormatter()" />
+</div>
+
+@code {
+
+    private (int startYear, int endYear) m_YearRange;
+
+    private List<UserAnswer<int?>> m_UserAnswers = new List<UserAnswer<int?>>();
+
+    private static Dictionary<AnswerFormatType, string> AnswerFormatTypeStrings = new Dictionary<AnswerFormatType, string>
+{
+        { AnswerFormatType.Numbers, "Use the numbers 0 to 6" },
+        { AnswerFormatType.EfficientNumbers, "Use the numbers -3 to +3" },
+        { AnswerFormatType.StringsSundayToSaturday, "Use the options Sunday to Saturday" },
+        { AnswerFormatType.StringsMondayToSunday, "Use the options Monday to Sunday" },
+    };
+
+    private static int?[] m_NumericOrder = new int?[] { 0, 1, 2, 3, 4, 5, 6 };
+
+    private static int?[] m_EfficientNumericOrder = new int?[] { 4, 5, 6, 0, 1, 2, 3 };
+
+    private static int?[] m_FromMondayOrder = new int?[] { 1, 2, 3, 4, 5, 6, 0 };
+
+    private static int?[] m_FromSundayOrder = new int?[] { 0, 1, 2, 3, 4, 5, 6 };
+
+    private static string[] m_DaysOfTheWeek = new[]{
+        "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+    };
+
+    private static string ConvertToString(int? p)
+    {
+        return p.ToString();
+    }
+
+    private static string ConvertToEfficientNumberString(int? p)
+    {
+        return (p >= 4 ? p - 7 : p).ToString();
+    }
+
+    private static string ConvertToDayOfWeekString(int? p)
+    {
+        if (p == null)
+            return String.Empty;
+        return m_DaysOfTheWeek[p.Value];
+    }
+
+    enum AnswerFormatType
+    {
+        Numbers = 0,
+        EfficientNumbers = 1,
+        StringsSundayToSaturday = 2,
+        StringsMondayToSunday = 3
+    }
+
+    AnswerFormatType ChoosenAnswerFormat { get; set; } = AnswerFormatType.StringsSundayToSaturday;
+
+    [Parameter]
+    public string YearRange { set => m_YearRange = DetermineYearRangeFromString(value); }
+
+    private (int startYear, int endYear) DetermineYearRangeFromString(string pInput)
+    {
+        int start = 0;
+        int end = 0;
+        var parts = pInput.Split('-');
+        if (parts.Length == 1 && Int32.TryParse(pInput, out start))
+            return (start, start);
+        if (parts.Length == 2 && Int32.TryParse(parts[0], out start) && Int32.TryParse(parts[1], out end))
+            return (start, end);
+        throw new NotImplementedException("Could not get range from parameter");
+    }
+
+    public QuestionAnswerPair<int?> GenerateQuestion()
+    {
+        var r = new Random();
+        var start = new DateTime(m_YearRange.startYear, 1, 1);
+        var end = new DateTime(m_YearRange.endYear, 12, 31);
+        int range = (end - start).Days;
+
+        var randomDate = start.AddDays(r.Next(range));
+
+        var answer = (int?)randomDate.DayOfWeek;
+
+        return new QuestionAnswerPair<int?>($"{randomDate.ToString("d", CultureInfo.CurrentCulture)}", answer);
+    }
+
+    private int?[] GetAnswerOptionsByFormat(AnswerFormatType pAnswerFormatType)
+    {
+        return pAnswerFormatType switch
+        {
+            AnswerFormatType.Numbers => m_NumericOrder,
+            AnswerFormatType.EfficientNumbers => m_EfficientNumericOrder,
+            AnswerFormatType.StringsSundayToSaturday => m_FromSundayOrder,
+            AnswerFormatType.StringsMondayToSunday => m_FromMondayOrder,
+            _ => throw new NotImplementedException()
+        };
+
+    }
+
+    private Func<int?, string> DetermineFormatter()
+    {
+        return ChoosenAnswerFormat switch
+        {
+            AnswerFormatType.Numbers => ConvertToString,
+            AnswerFormatType.EfficientNumbers => ConvertToEfficientNumberString,
+            AnswerFormatType.StringsSundayToSaturday => ConvertToDayOfWeekString,
+            AnswerFormatType.StringsMondayToSunday => ConvertToDayOfWeekString,
+            _ => throw new NotImplementedException()
+        };
+    }
+
+    public void OnAnswered(UserAnswer<int?> pUserAnswer)
+    {
+        m_UserAnswers.Add(pUserAnswer);
+    }
+
+}

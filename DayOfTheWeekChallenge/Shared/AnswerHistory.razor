@@ -1,0 +1,43 @@
+﻿@inherits LayoutComponentBase
+@using Core;
+@using Microsoft.Extensions.Logging;
+@using System.Globalization; 
+@inject ILogger<AnswerHistory<TAnswer>> logger;
+
+    <div @attributes="InputAttributes">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Question</th>
+                    <th scope="col">Give answer</th>
+                    <th scope="col">Correct answer</th>
+                    <th scope="col">Time</th>
+                </tr>
+            </thead>
+            @for (var i = UserAnswers.Count - 1; i >= 0; i--)
+            {
+                var userAnswer = UserAnswers[i];
+                <tr class="@(userAnswer.AnsweredCorrectly ? "table-success" : "table-danger")">
+                    <td>@(i + 1)</td>
+                    <td>@(userAnswer.Question)</td>
+                    <td>@(ConvertValue(userAnswer.GivenAnswer))</td>
+                    <td>@(ConvertValue(userAnswer.CorrectAnswer))</td>
+                    <td>@(((int)userAnswer.Time.TotalMilliseconds).ToString("N0")) ms</td>
+                </tr>
+            }
+        </table>
+    </div>
+
+@typeparam TAnswer
+
+@code{
+    [Parameter]
+    public List<UserAnswer<TAnswer>> UserAnswers { get; set; }
+
+    [Parameter]
+    public Func<TAnswer, string> ConvertValue { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> InputAttributes { get; set; }
+}
