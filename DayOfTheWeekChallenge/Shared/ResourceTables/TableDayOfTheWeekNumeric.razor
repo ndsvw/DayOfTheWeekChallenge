@@ -1,38 +1,47 @@
-﻿<Table Hoverable="true" Bordered="true">
+﻿<!-- Alternative representation is described here: https://www.wikihow.com/Calculate-the-Day-of-the-Week -->
+<Table Hoverable="true" Bordered="true">
     <TableHeader ThemeContrast="ThemeContrast.Light">
         <TableRow>
             <TableHeaderCell>Day of the week</TableHeaderCell>
-            <TableHeaderCell>Numeric representation</TableHeaderCell>
+            <TableHeaderCell>Numeric representation <b style="color: red;">(for default method 1)</b></TableHeaderCell>
+            <TableHeaderCell>Numeric representation <b style="color: green;">(for default method 2)</b></TableHeaderCell>
         </TableRow>
     </TableHeader>
     <TableBody>
         <TableRow>
             <TableRowHeader>Monday</TableRowHeader>
             <TableRowCell>1</TableRowCell>
+            <TableRowCell>2</TableRowCell>
         </TableRow>
         <TableRow>
             <TableRowHeader>Tuesday</TableRowHeader>
             <TableRowCell>2</TableRowCell>
+            <TableRowCell>3</TableRowCell>
         </TableRow>
         <TableRow>
             <TableRowHeader>Wednesday</TableRowHeader>
             <TableRowCell>3</TableRowCell>
+            <TableRowCell>4 (or -3)</TableRowCell>
         </TableRow>
         <TableRow>
             <TableRowHeader>Tuesday</TableRowHeader>
             <TableRowCell>4 (or -3)</TableRowCell>
+            <TableRowCell>5 (or -2)</TableRowCell>
         </TableRow>
         <TableRow>
             <TableRowHeader>Friday</TableRowHeader>
             <TableRowCell>5 (or -2)</TableRowCell>
+            <TableRowCell>6 (or -1)</TableRowCell>
         </TableRow>
         <TableRow>
             <TableRowHeader>Saturday</TableRowHeader>
             <TableRowCell>6 (or -1)</TableRowCell>
+            <TableRowCell>0</TableRowCell>
         </TableRow>
         <TableRow>
             <TableRowHeader>Sunday</TableRowHeader>
             <TableRowCell>0</TableRowCell>
+            <TableRowCell>1</TableRowCell>
         </TableRow>
     </TableBody>
 </Table>
