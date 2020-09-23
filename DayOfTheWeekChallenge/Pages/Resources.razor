@@ -1,0 +1,35 @@
+﻿@page "/resources"
+@using DayOfTheWeekChallenge.Shared.ResourceTables;
+
+<div class="accordion" id="resourceTablesAccordion">
+
+    <div class="card">
+        <div class="card-header" id="resource1">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                    Day of the week - Numeric
+                </button>
+            </h2>
+        </div>
+        <div id="collapse1" class="collapse show" aria-labelledby="resource1" data-parent="#resourceTablesAccordion">
+            <div class="card-body">
+                <TableDayOfTheWeekNumeric />
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header" id="resource2">
+            <h2 class="mb-0">
+                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                    Months - Numeric
+                </button>
+            </h2>
+        </div>
+        <div id="collapse2" class="collapse" aria-labelledby="resource2" data-parent="#resourceTablesAccordion">
+            <div class="card-body">
+                <TableMonthsNumeric />
+            </div>
+        </div>
+    </div>
+</div>
