@@ -20,6 +20,10 @@ app {
     flex-direction: column;
 }
 
+h1 {
+    margin-bottom: 2em;
+}
+
 .top-row {
     height: 3.5rem;
     display: flex;
