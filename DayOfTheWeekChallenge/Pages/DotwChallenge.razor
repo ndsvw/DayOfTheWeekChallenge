@@ -4,9 +4,9 @@
 @using System.Globalization;
 @inject ILogger<DotwChallenge> logger;
 
-<h3>DayOfTheWeek challenge</h3>
-
 <div class="container text-center">
+    <h1>DayOfTheWeek Challenge</h1>
+
     <SettingsContainer>
         <RadioGroup TValue="AnswerFormatType" Name="answerFormat" @bind-CheckedValue="@ChoosenAnswerFormat">
             @foreach (var val in Enum.GetValues(typeof(AnswerFormatType)).Cast<AnswerFormatType>())

@@ -3,9 +3,9 @@
 @using Microsoft.Extensions.Logging;
 @inject ILogger<HundredYearCodes> logger;
 
-<h3>Month codes</h3>
-
 <div class="container text-center">
+    <h1>Month codes</h1>
+
     <SettingsContainer>
         <div>
             <SwitchElement @bind-Checked="@UseEfficientNumbers" />
@@ -13,10 +13,10 @@
         </div>
     </SettingsContainer>
     <GenericChallenge TAnswer="int?"
-                AnswerOptions="@(UseEfficientNumbers ? m_EfficientNumericOrder : m_NumericOrder)"
-                QuestionGenerator="@GenerateQuestion"
-                OnAnswerCallback="OnAnswered"
-                ConvertValue="@(x => UseEfficientNumbers ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
+                      AnswerOptions="@(UseEfficientNumbers ? m_EfficientNumericOrder : m_NumericOrder)"
+                      QuestionGenerator="@GenerateQuestion"
+                      OnAnswerCallback="OnAnswered"
+                      ConvertValue="@(x => UseEfficientNumbers ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
 
     <AnswerHistory UserAnswers="@m_UserAnswers"
                    class="mt-5"
