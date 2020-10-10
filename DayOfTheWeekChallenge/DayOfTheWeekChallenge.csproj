@@ -23,4 +23,7 @@
     <Folder Include="Shared\" />
     <Folder Include="Shared\ResourceTables\" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Shared\InteractiveExamples.razor" />
+  </ItemGroup>
 </Project>

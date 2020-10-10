@@ -1,0 +1,219 @@
+﻿@using System.Globalization;
+
+@if (Date < new DateTime(1600, 1, 1) || Date > new DateTime(9999, 12, 31))
+{
+    <Alert Color="Color.Danger" Visible="true" Class="mt-3">
+        Please select a date after @(new DateTime(1600, 1, 1).ToString("d", CultureInfo.CurrentCulture))
+    </Alert>
+}
+else {
+    <style>
+        b.red{
+            color: red;
+        }
+        b.blue{
+            color: blue;
+        }
+        b.orange{
+            color: orange;
+        }
+        b.black{
+            color: black;
+        }
+    </style>
+
+    <div @attributes="InputAttributes">
+        <Alert Color="Color.Primary" Visible="true">
+            <Heading Size="HeadingSize.Is2" TextColor="TextColor.Dark" Class="mt-3">
+                @Date.ToString("d", CultureInfo.CurrentCulture)
+            </Heading>
+
+            <!-- Step 1 -->
+            <!-- ------ -->
+            <Heading Size="HeadingSize.Is4" TextColor="TextColor.Success" Class="text-left">
+                Step 1: Finding out the Year code
+            </Heading>
+            <Paragraph>
+                @{
+                    var x = Date.Year % 100;
+                    int y = Date.Year % 100 / 4;
+                    var z = x + y;
+                    var sol = z % 7;
+                }
+                <b class="red">@x</b> / 4 = <b class="blue">@y</b><br />
+                <b class="red">@x</b> + <b class="blue">@y</b> = <b class="orange">@z</b><br />
+                <b class="orange">@z</b> modulo 7 = <b class="black">@sol</b>
+            </Paragraph>
+            <Paragraph>
+                <u>or more efficient (smaller numbers):</u><br />
+                @{
+                    var x = Date.Year % 100;
+                    var xEfficient = x % 7;
+                    int y = Date.Year % 100 / 4;
+                    var yEfficient = y % 7;
+                    var z = xEfficient + yEfficient;
+                    var sol = z % 7;
+                }
+
+                <b class="red">@x</b> / 4 = <b class="blue">@y</b><br />
+                <b class="blue">@y</b> modulo 7 = <b class="blue">@yEfficient</b><br />
+                <b class="red">@x</b> modulo 7 = <b class="red">@xEfficient</b><br />
+                <b class="red">@xEfficient</b> + <b class="blue">@yEfficient</b> = <b class="orange">@z</b><br />
+                <b class="orange">@z</b> modulo 7 = <b class="black">@sol</b>
+            </Paragraph>
+            <Paragraph>
+                @{
+                    var x = Date.Year % 100;
+                    var sol = (x + (int)(x / 4)) % 7;
+                }
+                <u>The most efficient way would be: Learning all the 100 numbers (<b class="red">@x</b> -> <b class="black">@sol</b> in this case)</u>
+            </Paragraph>
+
+            <!-- Step 2 -->
+            <!-- ------ -->
+            <Heading Size="HeadingSize.Is4" TextColor="TextColor.Success" Class="text-left">
+                Step 2: Finding out the Centenary code
+            </Heading>
+            <Paragraph>
+                <u>The Centenary codes should be known (and not being calculated) as there are not many relevant ones (see <a href="https://localhost:5001/resources">Centenaries - Numeric</a>).</u><br />
+            </Paragraph>
+            <Paragraph>
+                @{
+                    int x = (Date.Year - (Date.Year % 100)) / 100;
+                    var sol = new int[] { 0, 5, 3, 1 }[x % 4];
+                }
+                The Centenary code of <b class="red">@(x)XX</b> is <b class="black">@sol</b>
+            </Paragraph>
+
+            <!-- Step 3 -->
+            <!-- ------ -->
+            <Heading Size="HeadingSize.Is4" TextColor="TextColor.Success" Class="text-left">
+                Step 3: Finding out the Month code
+            </Heading>
+            <Paragraph>
+                <u>The Month codes should be known (and not being calculated) as there are not many (see <a href="https://localhost:5001/resources">Months - Numeric</a>).</u><br />
+            </Paragraph>
+            <Paragraph>
+                @{
+                    var month = new[] {
+                        "January", "February", "March", "April", "May", "June",
+                        "July", "August", "September", "October", "November", "December"
+                    }[Date.Month - 1];
+                    var sol = new int[] { 6, 2, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4 }[Date.Month - 1];
+                }
+                The Month code of <b class="red">@month</b> is <b class="black">@sol</b>
+            </Paragraph>
+
+            <!-- Step 4 -->
+            <!-- ------ -->
+            <Heading Size="HeadingSize.Is4" TextColor="TextColor.Success" Class="text-left">
+                Step 4: Finding out the Day code
+            </Heading>
+            <Paragraph>
+                @{
+                    var x = Date.Day;
+                    var sol = x % 7;
+                }
+                <b class="red">@x</b> modulo 7 = <b class="black">@sol</b><br />
+            </Paragraph>
+
+            <!-- Step 5 -->
+            <!-- ------ -->
+            <Heading Size="HeadingSize.Is4" TextColor="TextColor.Success" Class="text-left">
+                Step 5: Leap year check
+            </Heading>
+            @if (Date.Month >= 3)
+            {
+                <Paragraph>
+                    We do only need to make the leap year check for dates in January or February.
+                    So we don't need to do anything.
+                </Paragraph>
+            }
+            else if (Date.Year % 4 > 0)
+            {
+                <Paragraph>
+                    The month of the date is January or February. That means that we need to make the leap year check:<br />
+                    <b class="red">@(Date.Year)</b> modulo 4 is not equal to 0.<br />
+                    So this is not a leap year and we don't need to do anything.
+                </Paragraph>
+            }
+            else if (Date.Year % 4 == 0 && Date.Year % 100 != 0)
+            {
+                <Paragraph>
+                    The month of the date is January or February. That means that we need to make the leap year check:<br />
+                    <b class="red">@(Date.Year)</b> modulo 4 is equal to 0<br />
+                    and <b class="red">@(Date.Year)</b> modulo 100 is not equal to 0<br />
+                    So this is a leap year and we need to subtract <b class="black">1</b> in the last step.
+                </Paragraph>
+            }
+            else if (Date.Year % 4 == 0 && Date.Year % 100 == 0 && Date.Year % 400 != 0)
+            {
+                <Paragraph>
+                    The month of the date is January or February. That means that we need to make the leap year check:<br />
+                    <b class="red">@(Date.Year)</b> modulo 4 is equal to 0<br />
+                    but <b class="red">@(Date.Year)</b> modulo 100 is equal to 0<br />
+                    and <b class="red">@(Date.Year)</b> modulo 400 is not equal to 0<br />
+                    So this is not a leap year and we don't need to do anything.
+                </Paragraph>
+            }
+            else
+            {
+                <Paragraph>
+                    The month of the date is January or February. That means that we need to make the leap year check:<br />
+                    <b class="red">@(Date.Year)</b> modulo 4 is equal to 0<br />
+                    but <b class="red">@(Date.Year)</b> modulo 100 is equal to 0<br />
+                    but <b class="red">@(Date.Year)</b> modulo 400 is also equal to 0<br />
+                    So this is a leap year and we need to subtract <b class="black">1</b> in the last step.
+                </Paragraph>
+            }
+
+            <!-- Step 6 -->
+            <!-- ------ -->
+            <Heading Size="HeadingSize.Is4" TextColor="TextColor.Success" Class="text-left">
+                Step 6: Adding up all codes
+            </Heading>
+            <Paragraph>
+                @{
+                    var x = Date.Year % 100;
+                    var code1 = (x + (int)(x / 4)) % 7;
+                    int y = (Date.Year - (Date.Year % 100)) / 100;
+                    var code2 = new int[] { 0, 5, 3, 1 }[y % 4];
+                    var code3 = new int[] { 6, 2, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4 }[Date.Month - 1];
+                    var code4 = Date.Day % 7;
+                    var code5 = DateTime.IsLeapYear(Date.Year) && Date.Day <= 2 ? 1 : 0;
+                    var sum = code1 + code2 + code3 + code4 - code5;
+                    var dotwCode = sum % 7;
+                    var dotwString = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+                }
+                Code from Step 1: <b class="red">@code1</b><br />
+                Code from Step 2: <b class="red">@code2</b><br />
+                Code from Step 3: <b class="red">@code3</b><br />
+                Code from Step 4: <b class="red">@code4</b><br />
+                Code from Step 5: <b class="red">@code5</b><br />
+                <br />
+                <b class="red">@code1</b>
+                + <b class="red">@code2</b>
+                + <b class="red">@code3</b>
+                + <b class="red">@code4</b>
+                @if (code5 == 1)
+                {
+                    <span>
+                        - <b class="red">@code5</b>
+                    </span>
+                }
+                = <b class="black">@sum</b><br />
+                <b class="black">@sum</b> modulo 7 = <b class="black">@dotwCode</b><br />
+                <b class="black">@dotwCode</b> means <b class="black">@dotwString[dotwCode]</b>
+            </Paragraph>
+        </Alert>
+    </div>
+}
+
+
+@code {
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> InputAttributes { get; set; }
+
+    [Parameter]
+    public DateTime Date { get; set; }
+}

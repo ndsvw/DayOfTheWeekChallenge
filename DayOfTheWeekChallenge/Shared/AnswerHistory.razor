@@ -4,6 +4,8 @@
 @using System.Globalization; 
 @inject ILogger<AnswerHistory<TAnswer>> logger;
 
+@if (UserAnswers.Count > 0)
+{
     <div @attributes="InputAttributes">
         <table class="table">
             <thead>
@@ -28,6 +30,7 @@
             }
         </table>
     </div>
+}
 
 @typeparam TAnswer
 

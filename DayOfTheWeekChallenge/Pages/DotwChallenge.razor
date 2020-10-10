@@ -98,15 +98,9 @@
 
     public QuestionAnswerPair<int?> GenerateQuestion()
     {
-        var r = new Random();
-        var start = new DateTime(m_YearRange.startYear, 1, 1);
-        var end = new DateTime(m_YearRange.endYear, 12, 31);
-        int range = (end - start).Days;
-
-        var randomDate = start.AddDays(r.Next(range));
+        var randomDate = RandomDateGenerator.Generate(m_YearRange.startYear, m_YearRange.endYear);
 
         var answer = (int?)randomDate.DayOfWeek;
-
         return new QuestionAnswerPair<int?>($"{randomDate.ToString("d", CultureInfo.CurrentCulture)}", answer);
     }
 

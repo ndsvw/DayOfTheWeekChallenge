@@ -1,0 +1,12 @@
+﻿@page "/interactive"
+
+<div class="container text-center">
+    <h1>HundredYear codes</h1>
+    <Blazorise.DateEdit TValue="DateTime" Min="@(new DateTime(1600, 1, 1))" @bind-Date="@Date" Style="max-width: 300px; margin: 0 auto;" />
+
+    <VisualCalculator Date="@Date" class="mt-4" />
+</div>
+
+@code {
+    public DateTime Date { get; set; } = RandomDateGenerator.Generate(1600, 2100);
+}
