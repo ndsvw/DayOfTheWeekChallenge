@@ -3,18 +3,21 @@
 @using System.Diagnostics;
 @inject ILogger<GenericChallenge<TAnswer>> logger;
 
-<div class="alert alert-primary font-weight-bold ml-4 mr-4" role="alert" style="display: inline-block">@Question</div>
+<div class="noselect">
+    <div class="alert alert-primary font-weight-bold ml-4 mr-2" role="alert" style="display: inline-block">@Question</div>
+    <i class="fas fa-redo border rounded-circle p-2" style="cursor: pointer;" @onclick="GenerateNewQuestion"></i>
 
-<div>
-    @foreach (var answerOption in AnswerOptions)
-    {
-        <AnswerOptionButton TAnswer="TAnswer"
-                            Value="@answerOption"
-                            Disabled="@(ChoosenAnswer != null)"
-                            Selected="@(Equals(answerOption, ChoosenAnswer))"
-                            OnClickCallback=ChooseAnswer
-                            ConvertValue="ConvertValue" />
-    }
+    <div>
+        @foreach (var answerOption in AnswerOptions)
+        {
+            <AnswerOptionButton TAnswer="TAnswer"
+                                Value="@answerOption"
+                                Disabled="@(ChoosenAnswer != null)"
+                                Selected="@(Equals(answerOption, ChoosenAnswer))"
+                                OnClickCallback=ChooseAnswer
+                                ConvertValue="ConvertValue" />
+        }
+    </div>
 </div>
 
 @typeparam TAnswer
