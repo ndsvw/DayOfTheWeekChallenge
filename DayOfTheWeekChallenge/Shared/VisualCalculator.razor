@@ -1,6 +1,7 @@
 ﻿@using System.Globalization;
+@using Core;
 
-@if (Date < new DateTime(1600, 1, 1) || Date > new DateTime(9999, 12, 31))
+@if (!IsDateValid)
 {
     <Alert Color="Color.Danger" Visible="true" Class="mt-3">
         Please select a date after @(new DateTime(1600, 1, 1).ToString("d", CultureInfo.CurrentCulture))
@@ -34,39 +35,20 @@ else {
                 Step 1: Finding out the Year code
             </Heading>
             <Paragraph>
-                @{
-                    var x = Date.Year % 100;
-                    int y = Date.Year % 100 / 4;
-                    var z = x + y;
-                    var sol = z % 7;
-                }
-                <b class="red">@x</b> / 4 = <b class="blue">@y</b><br />
-                <b class="red">@x</b> + <b class="blue">@y</b> = <b class="orange">@z</b><br />
-                <b class="orange">@z</b> modulo 7 = <b class="black">@sol</b>
+                <b class="red">@Calculation.Step1ValueA</b> / 4 = <b class="blue">@Calculation.Step1ValueB</b><br />
+                <b class="red">@Calculation.Step1ValueA</b> + <b class="blue">@Calculation.Step1ValueB</b> = <b class="orange">@Calculation.Step1ValueC</b><br />
+                <b class="orange">@Calculation.Step1ValueC</b> modulo 7 = <b class="black">@Calculation.Step1ValueD</b>
             </Paragraph>
             <Paragraph>
                 <u>or more efficient (smaller numbers):</u><br />
-                @{
-                    var x = Date.Year % 100;
-                    var xEfficient = x % 7;
-                    int y = Date.Year % 100 / 4;
-                    var yEfficient = y % 7;
-                    var z = xEfficient + yEfficient;
-                    var sol = z % 7;
-                }
-
-                <b class="red">@x</b> / 4 = <b class="blue">@y</b><br />
-                <b class="blue">@y</b> modulo 7 = <b class="blue">@yEfficient</b><br />
-                <b class="red">@x</b> modulo 7 = <b class="red">@xEfficient</b><br />
-                <b class="red">@xEfficient</b> + <b class="blue">@yEfficient</b> = <b class="orange">@z</b><br />
-                <b class="orange">@z</b> modulo 7 = <b class="black">@sol</b>
+                <b class="red">@Calculation.Step1ValueA</b> / 4 = <b class="blue">@Calculation.Step1ValueB</b><br />
+                <b class="blue">@Calculation.Step1ValueB</b> modulo 7 = <b class="blue">@Calculation.Step1EfficientValueB</b><br />
+                <b class="red">@Calculation.Step1ValueA</b> modulo 7 = <b class="red">@Calculation.Step1EfficientValueA</b><br />
+                <b class="red">@Calculation.Step1EfficientValueA</b> + <b class="blue">@Calculation.Step1EfficientValueB</b> = <b class="orange">@Calculation.Step1EfficientValueC</b><br />
+                <b class="orange">@Calculation.Step1EfficientValueC</b> modulo 7 = <b class="black">@Calculation.Step1ValueD</b>
             </Paragraph>
             <Paragraph>
-                @{
-                    var x = Date.Year % 100;
-                    var sol = (x + (int)(x / 4)) % 7;
-                }
-                <u>The most efficient way would be: Learning all the 100 numbers (<b class="red">@x</b> -> <b class="black">@sol</b> in this case)</u>
+                <u>The most efficient way would be: Learning all the 100 numbers (<b class="red">@Calculation.Step1ValueA</b> -> <b class="black">@Calculation.Step1Code</b> in this case)</u>
             </Paragraph>
 
             <!-- Step 2 -->
@@ -78,11 +60,7 @@ else {
                 <u>The Centenary codes should be known (and not being calculated) as there are not many relevant ones (see <a href="https://localhost:5001/resources">Centenaries - Numeric</a>).</u><br />
             </Paragraph>
             <Paragraph>
-                @{
-                    int x = (Date.Year - (Date.Year % 100)) / 100;
-                    var sol = new int[] { 0, 5, 3, 1 }[x % 4];
-                }
-                The Centenary code of <b class="red">@(x)XX</b> is <b class="black">@sol</b>
+                The Centenary code of <b class="red">@(Calculation.Step2ValueA)XX</b> is <b class="black">@Calculation.Step2Code</b>
             </Paragraph>
 
             <!-- Step 3 -->
@@ -94,14 +72,7 @@ else {
                 <u>The Month codes should be known (and not being calculated) as there are not many (see <a href="https://localhost:5001/resources">Months - Numeric</a>).</u><br />
             </Paragraph>
             <Paragraph>
-                @{
-                    var month = new[] {
-                        "January", "February", "March", "April", "May", "June",
-                        "July", "August", "September", "October", "November", "December"
-                    }[Date.Month - 1];
-                    var sol = new int[] { 6, 2, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4 }[Date.Month - 1];
-                }
-                The Month code of <b class="red">@month</b> is <b class="black">@sol</b>
+                The Month code of <b class="red">@Calculation.Step3MonthName</b> is <b class="black">@Calculation.Step3Code</b>
             </Paragraph>
 
             <!-- Step 4 -->
@@ -110,11 +81,7 @@ else {
                 Step 4: Finding out the Day code
             </Heading>
             <Paragraph>
-                @{
-                    var x = Date.Day;
-                    var sol = x % 7;
-                }
-                <b class="red">@x</b> modulo 7 = <b class="black">@sol</b><br />
+                <b class="red">@Calculation.Step4ValueA</b> modulo 7 = <b class="black">@Calculation.Step4Code</b><br />
             </Paragraph>
 
             <!-- Step 5 -->
@@ -173,37 +140,25 @@ else {
                 Step 6: Adding up all codes
             </Heading>
             <Paragraph>
-                @{
-                    var x = Date.Year % 100;
-                    var code1 = (x + (int)(x / 4)) % 7;
-                    int y = (Date.Year - (Date.Year % 100)) / 100;
-                    var code2 = new int[] { 0, 5, 3, 1 }[y % 4];
-                    var code3 = new int[] { 6, 2, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4 }[Date.Month - 1];
-                    var code4 = Date.Day % 7;
-                    var code5 = DateTime.IsLeapYear(Date.Year) && Date.Day <= 2 ? 1 : 0;
-                    var sum = code1 + code2 + code3 + code4 - code5;
-                    var dotwCode = sum % 7;
-                    var dotwString = new[] { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
-                }
-                Code from Step 1: <b class="red">@code1</b><br />
-                Code from Step 2: <b class="red">@code2</b><br />
-                Code from Step 3: <b class="red">@code3</b><br />
-                Code from Step 4: <b class="red">@code4</b><br />
-                Code from Step 5: <b class="red">@code5</b><br />
+                Code from Step 1: <b class="red">@Calculation.Step1Code</b><br />
+                Code from Step 2: <b class="red">@Calculation.Step2Code</b><br />
+                Code from Step 3: <b class="red">@Calculation.Step3Code</b><br />
+                Code from Step 4: <b class="red">@Calculation.Step4Code</b><br />
+                Code from Step 5: <b class="red">@(Calculation.Step5AbsoluteCode == 1 ? -1 : 0)</b><br />
                 <br />
-                <b class="red">@code1</b>
-                + <b class="red">@code2</b>
-                + <b class="red">@code3</b>
-                + <b class="red">@code4</b>
-                @if (code5 == 1)
+                <b class="red">@Calculation.Step1Code</b>
+                + <b class="red">@Calculation.Step2Code</b>
+                + <b class="red">@Calculation.Step3Code</b>
+                + <b class="red">@Calculation.Step4Code</b>
+                @if (@Calculation.Step5AbsoluteCode == 1)
                 {
                     <span>
-                        - <b class="red">@code5</b>
+                        - <b class="red">1</b>
                     </span>
                 }
-                = <b class="black">@sum</b><br />
-                <b class="black">@sum</b> modulo 7 = <b class="black">@dotwCode</b><br />
-                <b class="black">@dotwCode</b> means <b class="black">@dotwString[dotwCode]</b>
+                = <b class="black">@Calculation.Step6ValueA</b><br />
+                <b class="black">@Calculation.Step6ValueA</b> modulo 7 = <b class="black">@Calculation.Step6ValueB</b><br />
+                <b class="black">@Calculation.Step6ValueB</b> means <b class="black">@Calculation.Step6Dotw</b>
             </Paragraph>
         </Alert>
     </div>
@@ -211,9 +166,28 @@ else {
 
 
 @code {
+    private DateTime m_DateTime;
+
     [Parameter(CaptureUnmatchedValues = true)]
     public Dictionary<string, object> InputAttributes { get; set; }
 
     [Parameter]
-    public DateTime Date { get; set; }
+    public DateTime Date {
+        get => m_DateTime;
+        set {
+            m_DateTime = value;
+            try
+            {
+                Calculation = new DotwCalculation(value);
+                IsDateValid = true;
+            } catch(ArgumentException)
+            {
+                IsDateValid = false;
+            }
+        }
+    }
+
+    private DotwCalculation Calculation { get; set; }
+
+    private bool IsDateValid = true;
 }

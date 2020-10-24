@@ -1,7 +1,7 @@
-﻿@page "/interactive"
+﻿@page "/calculator"
 
 <div class="container text-center">
-    <h1>HundredYear codes</h1>
+    <h1>Visual calculator</h1>
     <Blazorise.DateEdit TValue="DateTime" Min="@(new DateTime(1600, 1, 1))" @bind-Date="@Date" Style="max-width: 300px; margin: 0 auto;" />
 
     <VisualCalculator Date="@Date" class="mt-4" />
