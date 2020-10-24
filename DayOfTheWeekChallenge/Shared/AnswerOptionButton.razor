@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 
 <button
-    class="btn @((Selected ? "btn-primary" : "btn-outline-primary")) grid-item"
+    class="btn @((Selected ? "btn-primary" : "btn-outline-primary")) grid-item mb-1"
     @onclick="@(e => { OnClickCallback.InvokeAsync(Value); })"
     disabled="@Disabled">
 @(ConvertValue(Value))
