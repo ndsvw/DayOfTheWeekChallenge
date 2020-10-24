@@ -7,28 +7,30 @@
 @if (UserAnswers.Count > 0)
 {
     <div @attributes="InputAttributes">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Question</th>
-                    <th scope="col">Given answer</th>
-                    <th scope="col">Correct answer</th>
-                    <th scope="col">Time</th>
-                </tr>
-            </thead>
-            @for (var i = UserAnswers.Count - 1; i >= 0; i--)
-            {
-                var userAnswer = UserAnswers[i];
-                <tr class="@(userAnswer.AnsweredCorrectly ? "table-success" : "table-danger")">
-                    <td>@(i + 1)</td>
-                    <td>@(userAnswer.Question)</td>
-                    <td>@(ConvertValue(userAnswer.GivenAnswer))</td>
-                    <td>@(ConvertValue(userAnswer.CorrectAnswer))</td>
-                    <td>@(((int)userAnswer.Time.TotalMilliseconds).ToString("N0")) ms</td>
-                </tr>
-            }
-        </table>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Question</th>
+                        <th scope="col">Given answer</th>
+                        <th scope="col">Correct answer</th>
+                        <th scope="col">Time</th>
+                    </tr>
+                </thead>
+                @for (var i = UserAnswers.Count - 1; i >= 0; i--)
+                {
+                    var userAnswer = UserAnswers[i];
+                    <tr class="@(userAnswer.AnsweredCorrectly ? "table-success" : "table-danger")">
+                        <td>@(i + 1)</td>
+                        <td>@(userAnswer.Question)</td>
+                        <td>@(ConvertValue(userAnswer.GivenAnswer))</td>
+                        <td>@(ConvertValue(userAnswer.CorrectAnswer))</td>
+                        <td>@(((int)userAnswer.Time.TotalMilliseconds).ToString("N0")) ms</td>
+                    </tr>
+                }
+            </table>
+        </div>
     </div>
 }
 
