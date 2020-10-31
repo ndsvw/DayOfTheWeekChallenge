@@ -1,0 +1,30 @@
+﻿@page "/settings"
+@using Core;
+@using Microsoft.Extensions.Logging;
+@inject ILogger<DotwChallenge> logger;
+@inject ISettings settings;
+
+<div class="container text-center">
+    <h1>Settings</h1>
+
+    <Alert Color="Color.Info" Visible="true">
+        <div>
+            <SwitchElement @bind-Checked="settings.PreferNumbericAnswers" />
+            <span class="align-middle">Prefer numeric answers (e.g. numbers instead of day of the week names)</span>
+        </div>
+
+        <div>
+            <SwitchElement @bind-Checked="settings.PreferEfficientNumbers" />
+            <span class="align-middle">Prefer efficient numbers (e.g. -3 to +3 instead of 0 to 7)</span>
+        </div>
+
+        <div>
+            <SwitchElement @bind-Checked="settings.IsSundayFirstDotw" />
+            <span class="align-middle">Construe Sunday as first day of the week</span>
+        </div>
+    </Alert>
+</div>
+
+@code {
+    
+}

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+using DayOfTheWeekChallenge.Core;
 
 namespace DayOfTheWeekChallenge
 {
@@ -24,6 +25,8 @@ namespace DayOfTheWeekChallenge
               })
               .AddBootstrapProviders()
               .AddFontAwesomeIcons();
+
+            builder.Services.AddSingleton<ISettings, Settings>();
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 

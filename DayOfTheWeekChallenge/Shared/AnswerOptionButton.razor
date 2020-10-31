@@ -2,6 +2,7 @@
 
 <button
     class="btn @((Selected ? "btn-primary" : "btn-outline-primary")) grid-item mb-1"
+    style="margin-left: .12rem; margin-right: .12rem"
     @onclick="@(e => { OnClickCallback.InvokeAsync(Value); })"
     disabled="@Disabled">
 @(ConvertValue(Value))

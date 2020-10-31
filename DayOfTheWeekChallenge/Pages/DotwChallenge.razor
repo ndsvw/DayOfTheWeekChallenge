@@ -3,29 +3,21 @@
 @using Microsoft.Extensions.Logging;
 @using System.Globalization;
 @inject ILogger<DotwChallenge> logger;
+@inject ISettings settings;
 
 <div class="container text-center">
     <h1>DayOfTheWeek Challenge</h1>
 
-    <SettingsContainer>
-        <RadioGroup TValue="AnswerFormatType" Name="answerFormat" @bind-CheckedValue="@ChoosenAnswerFormat">
-            @foreach (var val in Enum.GetValues(typeof(AnswerFormatType)).Cast<AnswerFormatType>())
-            {
-                <Radio TValue="AnswerFormatType" Value="@val">@(AnswerFormatTypeStrings[val])</Radio>
-            }
-        </RadioGroup>
-    </SettingsContainer>
-
     <GenericChallenge TAnswer="int?"
-                      AnswerOptions="@(GetAnswerOptionsByFormat(ChoosenAnswerFormat))"
+                      AnswerOptions="@(GetAnswerOptionsBySettings(settings))"
                       QuestionGenerator="@GenerateQuestion"
                       OnAnswerCallback="OnAnswered"
-                      ConvertValue="@DetermineFormatter()" />
+                      ConvertValue="@DetermineFormatter(settings)" />
 
     <AnswerHistory TAnswer="int?"
                    UserAnswers="@m_UserAnswers"
                    class="mt-5"
-                   ConvertValue="@DetermineFormatter()" />
+                   ConvertValue="@DetermineFormatter(settings)" />
 </div>
 
 @code {
@@ -33,14 +25,6 @@
     private (int startYear, int endYear) m_YearRange;
 
     private List<UserAnswer<int?>> m_UserAnswers = new List<UserAnswer<int?>>();
-
-    private static Dictionary<AnswerFormatType, string> AnswerFormatTypeStrings = new Dictionary<AnswerFormatType, string>
-{
-        { AnswerFormatType.Numbers, "Use the numbers 0 to 6" },
-        { AnswerFormatType.EfficientNumbers, "Use the numbers -3 to +3" },
-        { AnswerFormatType.StringsSundayToSaturday, "Use the options Sunday to Saturday" },
-        { AnswerFormatType.StringsMondayToSunday, "Use the options Monday to Sunday" },
-    };
 
     private static int?[] m_NumericOrder = new int?[] { 0, 1, 2, 3, 4, 5, 6 };
 
@@ -71,16 +55,6 @@
         return m_DaysOfTheWeek[p.Value];
     }
 
-    enum AnswerFormatType
-    {
-        Numbers = 0,
-        EfficientNumbers = 1,
-        StringsSundayToSaturday = 2,
-        StringsMondayToSunday = 3
-    }
-
-    AnswerFormatType ChoosenAnswerFormat { get; set; } = AnswerFormatType.StringsSundayToSaturday;
-
     [Parameter]
     public string YearRange { set => m_YearRange = DetermineYearRangeFromString(value); }
 
@@ -104,29 +78,31 @@
         return new QuestionAnswerPair<int?>($"{randomDate.ToString("d", CultureInfo.CurrentCulture)}", answer);
     }
 
-    private int?[] GetAnswerOptionsByFormat(AnswerFormatType pAnswerFormatType)
+    private int?[] GetAnswerOptionsBySettings(ISettings pSettings)
     {
-        return pAnswerFormatType switch
+        if (!pSettings.PreferNumbericAnswers)
         {
-            AnswerFormatType.Numbers => m_NumericOrder,
-            AnswerFormatType.EfficientNumbers => m_EfficientNumericOrder,
-            AnswerFormatType.StringsSundayToSaturday => m_FromSundayOrder,
-            AnswerFormatType.StringsMondayToSunday => m_FromMondayOrder,
-            _ => throw new NotImplementedException()
-        };
+            if (pSettings.IsSundayFirstDotw)
+                return m_FromSundayOrder;
+            else
+                return m_FromMondayOrder;
+        }
 
+        if (pSettings.PreferEfficientNumbers)
+            return m_EfficientNumericOrder;
+
+        return m_NumericOrder;
     }
 
-    private Func<int?, string> DetermineFormatter()
+    private Func<int?, string> DetermineFormatter(ISettings pSettings)
     {
-        return ChoosenAnswerFormat switch
-        {
-            AnswerFormatType.Numbers => ConvertToString,
-            AnswerFormatType.EfficientNumbers => ConvertToEfficientNumberString,
-            AnswerFormatType.StringsSundayToSaturday => ConvertToDayOfWeekString,
-            AnswerFormatType.StringsMondayToSunday => ConvertToDayOfWeekString,
-            _ => throw new NotImplementedException()
-        };
+        if (!pSettings.PreferNumbericAnswers)
+            return ConvertToDayOfWeekString;
+
+        if (pSettings.PreferEfficientNumbers)
+            return ConvertToEfficientNumberString;
+
+        return ConvertToString;
     }
 
     public void OnAnswered(UserAnswer<int?> pUserAnswer)

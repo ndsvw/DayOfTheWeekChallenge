@@ -2,25 +2,19 @@
 @using Core;
 @using Microsoft.Extensions.Logging;
 @inject ILogger<HundredYearCodes> logger;
+@inject ISettings settings;
 
 <div class="container text-center">
     <h1>Month codes</h1>
-
-    <SettingsContainer>
-        <div>
-            <SwitchElement @bind-Checked="@UseEfficientNumbers" />
-            <span class="align-middle">Use more efficient numbers (-3 to +3)</span>
-        </div>
-    </SettingsContainer>
     <GenericChallenge TAnswer="int?"
-                      AnswerOptions="@(UseEfficientNumbers ? m_EfficientNumericOrder : m_NumericOrder)"
+                      AnswerOptions="@(settings.PreferEfficientNumbers ? m_EfficientNumericOrder : m_NumericOrder)"
                       QuestionGenerator="@GenerateQuestion"
                       OnAnswerCallback="OnAnswered"
-                      ConvertValue="@(x => UseEfficientNumbers ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
+                      ConvertValue="@(x => settings.PreferEfficientNumbers ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
 
     <AnswerHistory UserAnswers="@m_UserAnswers"
                    class="mt-5"
-                   ConvertValue="@(x => UseEfficientNumbers ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
+                   ConvertValue="@(x => settings.PreferEfficientNumbers ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
 </div>
 
 @code {
@@ -41,8 +35,6 @@
     };
 
     private int[] m_Solutions = new[] { 6, 2, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4 };
-
-    private bool UseEfficientNumbers { get; set; }
 
     private static int?[] m_NumericOrder = new int?[] { 0, 1, 2, 3, 4, 5, 6 };
 
