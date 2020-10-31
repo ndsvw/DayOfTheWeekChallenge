@@ -9,14 +9,14 @@
     <h1>Year codes</h1>
 
     <GenericChallenge TAnswer="int?"
-                      AnswerOptions="@(settings.PreferEfficientNumbers ? m_EfficientNumericOrder : m_NumericOrder)"
+                      AnswerOptions="@(settings.PreferEfficientNumbers.Value ? m_EfficientNumericOrder : m_NumericOrder)"
                       QuestionGenerator="@GenerateQuestion"
                       OnAnswerCallback="OnAnswered"
-                      ConvertValue="@(x => settings.PreferEfficientNumbers ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
+                      ConvertValue="@(x => settings.PreferEfficientNumbers.Value ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
 
     <AnswerHistory UserAnswers="@m_UserAnswers"
                    class="mt-5"
-                   ConvertValue="@(x => settings.PreferEfficientNumbers ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
+                   ConvertValue="@(x => settings.PreferEfficientNumbers.Value ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
 </div>
 
 

@@ -1,11 +1,21 @@
-﻿namespace DayOfTheWeekChallenge.Core
+﻿using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components;
+
+namespace DayOfTheWeekChallenge.Core
 {
     public class Settings : ISettings
     {
-        public bool PreferNumbericAnswers { get; set; } = false;
+        public Settings(ISyncLocalStorageService pLocalStorage)
+        {
+            IsSundayFirstDotw = new LocalStorageSetting<bool>(pLocalStorage, nameof(IsSundayFirstDotw), true);
+            PreferNumbericAnswers = new LocalStorageSetting<bool>(pLocalStorage, nameof(PreferNumbericAnswers), false);
+            PreferEfficientNumbers = new LocalStorageSetting<bool>(pLocalStorage, nameof(PreferEfficientNumbers), true);
+        }
 
-        public bool PreferEfficientNumbers { get; set; } = true;
+        public LocalStorageSetting<bool> IsSundayFirstDotw { get; }
 
-        public bool IsSundayFirstDotw { get; set; } = true;
+        public LocalStorageSetting<bool> PreferNumbericAnswers { get; }
+
+        public LocalStorageSetting<bool> PreferEfficientNumbers { get; }
     }
 }

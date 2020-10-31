@@ -7,6 +7,9 @@ using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using DayOfTheWeekChallenge.Core;
+using Blazored.LocalStorage;
+using Blazored.LocalStorage.StorageOptions;
+using Blazored.LocalStorage.JsonConverters;
 
 namespace DayOfTheWeekChallenge
 {
@@ -25,6 +28,15 @@ namespace DayOfTheWeekChallenge
               })
               .AddBootstrapProviders()
               .AddFontAwesomeIcons();
+
+            builder.Services.AddBlazoredLocalStorage();
+
+            builder.Services.AddSingleton<ILocalStorageService, LocalStorageService>()
+                .AddSingleton<ISyncLocalStorageService, LocalStorageService>()
+                .Configure<LocalStorageOptions>(configureOptions =>
+                {
+                    configureOptions.JsonSerializerOptions.Converters.Add(new TimespanJsonConverter());
+                });
 
             builder.Services.AddSingleton<ISettings, Settings>();
 

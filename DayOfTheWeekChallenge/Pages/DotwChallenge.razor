@@ -80,15 +80,15 @@
 
     private int?[] GetAnswerOptionsBySettings(ISettings pSettings)
     {
-        if (!pSettings.PreferNumbericAnswers)
+        if (!pSettings.PreferNumbericAnswers.Value)
         {
-            if (pSettings.IsSundayFirstDotw)
+            if (pSettings.IsSundayFirstDotw.Value)
                 return m_FromSundayOrder;
             else
                 return m_FromMondayOrder;
         }
 
-        if (pSettings.PreferEfficientNumbers)
+        if (pSettings.PreferEfficientNumbers.Value)
             return m_EfficientNumericOrder;
 
         return m_NumericOrder;
@@ -96,10 +96,10 @@
 
     private Func<int?, string> DetermineFormatter(ISettings pSettings)
     {
-        if (!pSettings.PreferNumbericAnswers)
+        if (!pSettings.PreferNumbericAnswers.Value)
             return ConvertToDayOfWeekString;
 
-        if (pSettings.PreferEfficientNumbers)
+        if (pSettings.PreferEfficientNumbers.Value)
             return ConvertToEfficientNumberString;
 
         return ConvertToString;

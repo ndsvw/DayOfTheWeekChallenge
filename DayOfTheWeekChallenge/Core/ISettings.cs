@@ -2,11 +2,10 @@
 {
     public interface ISettings
     {
-        bool PreferNumbericAnswers { get; set; }
+        public LocalStorageSetting<bool> IsSundayFirstDotw { get; }
 
-        bool PreferEfficientNumbers { get; set; }
+        public LocalStorageSetting<bool> PreferNumbericAnswers { get; }
 
-        bool IsSundayFirstDotw { get; set; }
+        public LocalStorageSetting<bool> PreferEfficientNumbers { get; }
     }
 }
-    
