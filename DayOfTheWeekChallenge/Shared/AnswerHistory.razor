@@ -18,17 +18,23 @@
                         <th scope="col">Time</th>
                     </tr>
                 </thead>
-                @for (var i = UserAnswers.Count - 1; i >= 0; i--)
-                {
-                    var userAnswer = UserAnswers[i];
-                    <tr class="@(userAnswer.AnsweredCorrectly ? "table-success" : "table-danger")">
-                        <td>@(i + 1)</td>
-                        <td>@(userAnswer.Question)</td>
-                        <td>@(ConvertValue(userAnswer.GivenAnswer))</td>
-                        <td>@(ConvertValue(userAnswer.CorrectAnswer))</td>
-                        <td>@(((int)userAnswer.Time.TotalMilliseconds).ToString("N0")) ms</td>
-                    </tr>
-                }
+                 
+                <Virtualize Context="a" Items="@(UserAnswers.Select((userAnswer, index) => (index, userAnswer)).Reverse().ToList())" OverscanCount="10">
+                    <ItemContent>
+                        <tr class="@(a.userAnswer.AnsweredCorrectly ? "table-success" : "table-danger")">
+                            <td>@(a.index)</td>
+                            <td>@(a.userAnswer.Question)</td>
+                            <td>@(ConvertValue(a.userAnswer.GivenAnswer))</td>
+                            <td>@(ConvertValue(a.userAnswer.CorrectAnswer))</td>
+                            <td>@(((int)a.userAnswer.Time.TotalMilliseconds).ToString("N0")) ms</td>
+                        </tr>
+                    </ItemContent>
+                    <Placeholder>
+                        <p>
+                            Loading&hellip;
+                        </p>
+                    </Placeholder>
+                </Virtualize>
             </table>
         </div>
     </div>
