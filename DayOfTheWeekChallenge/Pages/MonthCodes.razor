@@ -11,8 +11,10 @@
                       OnAnswerCallback="OnAnswered"
                       ConvertValue="@(x => settings.PreferEfficientNumbers.Value ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
 
+    <ChallengeStatistics UserAnswers="@m_UserAnswers" class="mt-4" />
+
     <AnswerHistory UserAnswers="@m_UserAnswers"
-                   class="mt-5"
+                   class="mt-4"
                    ConvertValue="@(x => settings.PreferEfficientNumbers.Value ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
 </div>
 

@@ -1,0 +1,100 @@
+﻿@inherits LayoutComponentBase
+@using Microsoft.Extensions.Logging;
+@using System.Globalization; 
+@inject ILogger<AnswerHistory<TAnswer>> logger;
+
+<style>
+    .card-body{
+        font-weight: bold;
+    }
+</style>
+
+@if (UserAnswers.Count > 0)
+{
+<div @attributes="InputAttributes">
+    <div class="row">
+        <div class="col-lg-2">
+            <div class="card">
+                <div class="card-header">
+                    Answers ∑
+                </div>
+                <div class="card-body">
+                    @(UserAnswers.Count().ToString("N0"))
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="card">
+                <div class="card-header">
+                    Answers ✅
+                </div>
+                <div class="card-body">
+                    @(UserAnswers.Count(x => x.AnsweredCorrectly).ToString("N0"))
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="card">
+                <div class="card-header">
+                    Answers ❌
+                </div>
+                <div class="card-body">
+                    @(UserAnswers.Count(x => !x.AnsweredCorrectly).ToString("N0"))
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="card">
+                <div class="card-header">
+                    percentage ✅
+                </div>
+                <div class="card-body">
+                    @((UserAnswers.Count(x => x.AnsweredCorrectly) / (double)UserAnswers.Count()).ToString("P1"))
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="card">
+                <div class="card-header">
+                    Average 🕔
+                </div>
+                <div class="card-body">
+                    @(((long)UserAnswers.Average(x => x.Time.TotalMilliseconds)).ToString("N0")) ms
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2">
+            <div class="card">
+                <div class="card-header">
+                    Median 🕔
+                </div>
+                <div class="card-body">
+                    @(CalculateMedianMilliseconds(UserAnswers.Select(x => (long)x.Time.TotalMilliseconds).ToList()).ToString("N0")) ms
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+@typeparam TAnswer
+
+@code{
+    [Parameter]
+    public List<UserAnswer<TAnswer>> UserAnswers { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> InputAttributes { get; set; }
+
+    private static long CalculateMedianMilliseconds(IList<long> pNumbers)
+    {
+        var i = (int)Math.Ceiling((double)(pNumbers.Count() - 1) / 2);
+        if (i >= 0)
+        {
+            var values = pNumbers.ToList();
+            values.Sort();
+            return values[i];
+        }
+        return 0;
+    }
+}

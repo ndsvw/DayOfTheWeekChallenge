@@ -13,9 +13,11 @@
                       OnAnswerCallback="OnAnswered"
                       ConvertValue="@DetermineFormatter(settings)" />
 
+    <ChallengeStatistics UserAnswers="@m_UserAnswers" class="mt-4" />
+
     <AnswerHistory TAnswer="int?"
                    UserAnswers="@m_UserAnswers"
-                   class="mt-5"
+                   class="mt-4"
                    ConvertValue="@DetermineFormatter(settings)" />
 </div>
 
