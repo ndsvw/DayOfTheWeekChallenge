@@ -12,11 +12,11 @@ jobs:
     # uses GitHub's checkout action to checkout code form the master branch
     - uses: actions/checkout@v2
     
-    # sets up .NET Core SDK 3.1
-    - name: Setup .NET Core SDK
-      uses: actions/setup-dotnet@v1.6.0
+    # sets up .NET
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1
+        dotnet-version: 5.0.100
 
     # publishes Blazor project to the release-folder
     - name: Publish .NET Core Project
@@ -33,7 +33,7 @@ jobs:
       run: touch DayOfTheWeekChallenge/release/wwwroot/.nojekyll
       
     - name: Commit wwwroot to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@3.5.9
+      uses: JamesIves/github-pages-deploy-action@3.7.1
       with:
         GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
         BRANCH: gh-pages
