@@ -1,7 +1,7 @@
 ﻿self.assetsManifest = {
   "assets": [
     {
-      "hash": "sha256-jHGm23k7Hzwj2B8DmH\/H\/\/CCUQ\/xgYxQXrwAKd3MbEQ=",
+      "hash": "sha256-lhI29IoaBdv810K7hqWyo4ipmTNN+n4ZLGPNF28w3gA=",
       "url": "css\/app.css"
     },
     {
@@ -129,7 +129,7 @@
       "url": "_framework\/Microsoft.AspNetCore.Components.Forms.dll"
     },
     {
-      "hash": "sha256-TO2RornzMWTkAA79V20gdmtAGvVGTGLGQaOAZ1OR8Go=",
+      "hash": "sha256-TLjVFERIMRpXFX0kcAPv0x2\/NZwAJETUAHuQiJtI0wE=",
       "url": "_framework\/Microsoft.AspNetCore.Components.Web.dll"
     },
     {
@@ -185,7 +185,7 @@
       "url": "_framework\/System.IO.Pipelines.dll"
     },
     {
-      "hash": "sha256-fsnEdVKIXEt7Vt+mosFTUFWenHpe1caAI1Q\/ptV1xRo=",
+      "hash": "sha256-kJatnk1zoxLmzVjME1c0RBO7slXm4kKQdiVpLLh1EiQ=",
       "url": "_framework\/DayOfTheWeekChallenge.dll"
     },
     {
@@ -233,7 +233,7 @@
       "url": "_framework\/System.Linq.Expressions.dll"
     },
     {
-      "hash": "sha256-Et5EKq1lHu6FW82EzXNG9W4EH8tVc7Ef7uEFxFkzcoA=",
+      "hash": "sha256-Wi+X1s8mFocSoCdHL8PUJsB+4GEEqCGU62dWf\/cR4\/I=",
       "url": "_framework\/System.Linq.dll"
     },
     {
@@ -285,11 +285,11 @@
       "url": "_framework\/System.Text.RegularExpressions.dll"
     },
     {
-      "hash": "sha256-UgQWmte13JohjNl+f4azirDcJVFnb9smJZhpV46SYj0=",
+      "hash": "sha256-54zNZNQNBdEQNxhd2Au95X\/OdU5kb2J6IubKoMC5APc=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
-      "hash": "sha256-WUGa8waJpBpy\/ierV6XMuLl72AbldabJY+Y4AGNY0gQ=",
+      "hash": "sha256-bwFYP749JbRiwY+wzvi7aS3+A6O8oE1vS+xDapti32o=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -297,5 +297,5 @@
       "url": "_framework\/blazor.webassembly.js"
     }
   ],
-  "version": "iEjINnkC"
+  "version": "Jn2jDGx+"
 };
