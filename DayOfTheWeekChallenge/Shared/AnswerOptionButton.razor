@@ -3,8 +3,7 @@
 <button
     class="btn @((Selected ? "btn-primary" : "btn-outline-primary")) grid-item mb-1"
     style="margin-left: .12rem; margin-right: .12rem"
-    @onclick="@(e => { OnClickCallback.InvokeAsync(Value); })"
-    disabled="@Disabled">
+    @onclick="@(e => { OnClickCallback.InvokeAsync(Value); })">
 @(ConvertValue(Value))
 </button>
 
@@ -13,9 +12,6 @@
 @code{
     [Parameter]
     public TAnswer Value { get; set; }
-
-    [Parameter]
-    public bool Disabled { get; set; }
 
     [Parameter]
     public EventCallback<TAnswer> OnClickCallback { get; set; }

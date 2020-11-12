@@ -1,8 +1,48 @@
 ﻿@using Microsoft.Extensions.Logging;
 @using System.Diagnostics;
 @inject ILogger<GenericChallenge<TAnswer>> logger;
+@inject IJSRuntime JS;
 
-<div class="noselect">
+<style>
+    #challenge {
+        border: 1px solid white;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+    }
+
+    .challenge-green-border {
+        animation-name: challenge-animation-green;
+        animation-duration: 1.5s;
+    }
+
+    @@keyframes challenge-animation-green {
+        from {
+            border-color: green;
+        }
+
+        to {
+            border-color: white;
+        }
+    }
+
+    .challenge-red-border {
+        animation-name: challenge-animation-red;
+        animation-duration: 1.5s;
+    }
+
+    @@keyframes challenge-animation-red {
+        from {
+            border-color: red;
+        }
+
+        to {
+            border-color: white;
+        }
+    }
+</style>
+
+<div class="noselect pt-2 pb-2" id="challenge" @ref="challengeElement">
     <div class="alert alert-primary font-weight-bold ml-4 mr-2" role="alert" style="display: inline-block">@Question</div>
     <i class="fas fa-redo border rounded-circle p-2" style="cursor: pointer;" @onclick="GenerateNewQuestion"></i>
 
@@ -11,7 +51,6 @@
         {
             <AnswerOptionButton TAnswer="TAnswer"
                                 Value="@answerOption"
-                                Disabled="@(ChoosenAnswer != null)"
                                 Selected="@(Equals(answerOption, ChoosenAnswer))"
                                 OnClickCallback=ChooseAnswer
                                 ConvertValue="ConvertValue" />
@@ -23,6 +62,8 @@
 
 @code{
     private Stopwatch m_Stopwatch = new Stopwatch();
+
+    private ElementReference challengeElement;
 
     [Parameter]
     public IEnumerable<TAnswer> AnswerOptions { get; set; }
@@ -43,28 +84,32 @@
 
     private string Question { get; set; }
 
-    private void ChooseAnswer(TAnswer pAnswer)
+    private async void ChooseAnswer(TAnswer pAnswer)
     {
         m_Stopwatch.Stop();
         ChoosenAnswer = pAnswer;
-        if (Equals(CorrectAnswer, ChoosenAnswer))
-        {
+
+        var isAnswerCorrect = Equals(CorrectAnswer, ChoosenAnswer);
+
+        if (isAnswerCorrect)
             logger.LogInformation("correct");
-        }
         else
-        {
             logger.LogInformation("wrong. it was " + CorrectAnswer);
-        }
+
         var userAnswer = new UserAnswer<TAnswer>
         {
-            AnsweredCorrectly = Equals(CorrectAnswer, ChoosenAnswer),
+            AnsweredCorrectly = isAnswerCorrect,
             Question = Question,
             CorrectAnswer = CorrectAnswer,
             GivenAnswer = pAnswer,
             Time = m_Stopwatch.Elapsed
         };
-        OnAnswerCallback.InvokeAsync(userAnswer);
         GenerateNewQuestion();
+        await JS.InvokeVoidAsync("RemoveClassFromElement", challengeElement, "challenge-red-border");
+        await JS.InvokeVoidAsync("RemoveClassFromElement", challengeElement, "challenge-green-border");
+        await JS.InvokeVoidAsync("AddClassToElement", challengeElement, isAnswerCorrect ? "challenge-green-border" : "challenge-red-border");
+
+        await OnAnswerCallback.InvokeAsync(userAnswer);
     }
 
     private void GenerateNewQuestion()
