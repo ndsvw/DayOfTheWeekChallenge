@@ -29,9 +29,20 @@
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
     <script>navigator.serviceWorker.register('service-worker.js');</script>
-    <script>window.SetFocusToElement = (element) => {
+    <script>
+        window.SetFocusToElement = (element) => {
             element.focus();
-        };</script>
+        };
+        window.AddClassToElement = (element, className) => {
+            element.classList.add(className);
+        };
+        window.RemoveClassFromElement = (element, className) => {
+            element.classList.remove(className);
+            // forcing the browser to render. Otherwise, removing and
+            // re-adding the class wouln't have any effect:
+            void element.offsetWidth;
+        };
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
