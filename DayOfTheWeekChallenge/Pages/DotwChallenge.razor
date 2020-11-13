@@ -13,7 +13,10 @@
                       OnAnswerCallback="OnAnswered"
                       ConvertValue="@DetermineFormatter(settings)" />
 
-    <ChallengeStatistics UserAnswers="@m_UserAnswers" class="mt-4" />
+    @if (settings.IsStatisticsAreaVisible.Value)
+    {
+        <ChallengeStatistics UserAnswers="@m_UserAnswers" class="mt-4" />
+    }
 
     <AnswerHistory TAnswer="int?"
                    UserAnswers="@m_UserAnswers"

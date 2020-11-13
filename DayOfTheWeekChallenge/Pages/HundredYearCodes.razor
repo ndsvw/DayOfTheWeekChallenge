@@ -13,7 +13,10 @@
                       OnAnswerCallback="OnAnswered"
                       ConvertValue="@(x => settings.PreferEfficientNumbers.Value ? ConvertToEfficientNumberString(x) : ConvertToString(x))" />
 
-    <ChallengeStatistics UserAnswers="@m_UserAnswers" class="mt-4" />
+    @if (settings.IsStatisticsAreaVisible.Value)
+    {
+        <ChallengeStatistics UserAnswers="@m_UserAnswers" class="mt-4" />
+    }
 
     <AnswerHistory UserAnswers="@m_UserAnswers"
                    class="mt-4"
