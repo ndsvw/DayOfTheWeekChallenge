@@ -9,7 +9,7 @@
     <base href="/DayOfTheWeekChallenge/" />
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
 
     <link href="_content/Blazorise/blazorise.css" rel="stylesheet" />
     <link href="_content/Blazorise.Bootstrap/blazorise.bootstrap.css" rel="stylesheet" />
@@ -20,7 +20,12 @@
 </head>
 
 <body>
-    <app>Loading...</app>
+    <app>
+        <div style="position:absolute; top:35vh; width:100%; text-align:center">
+            <h1>DayOfTheWeekChallenge</h1>
+            <p><i class="fas fa-spin fa-spinner"></i> loading...</p>
+        </div>
+    </app>
 
     <div id="blazor-error-ui">
         An unhandled error has occurred.

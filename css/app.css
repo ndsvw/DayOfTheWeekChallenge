@@ -52,6 +52,7 @@ h1 {
 }
 
 .sidebar {
+    overflow-y: scroll;
     background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #1f0647 70%);
 }
 
