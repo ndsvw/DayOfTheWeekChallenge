@@ -1,0 +1,36 @@
+﻿#challenge {
+    border: 1px solid white;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.challenge-green-border {
+    animation-name: challenge-animation-green;
+    animation-duration: 1.5s;
+}
+
+@keyframes challenge-animation-green {
+    from {
+        border-color: green;
+    }
+
+    to {
+        border-color: white;
+    }
+}
+
+.challenge-red-border {
+    animation-name: challenge-animation-red;
+    animation-duration: 1.5s;
+}
+
+@keyframes challenge-animation-red {
+    from {
+        border-color: red;
+    }
+
+    to {
+        border-color: white;
+    }
+}
