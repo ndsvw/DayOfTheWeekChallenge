@@ -21,7 +21,7 @@
                 <Virtualize Context="a" Items="@(UserAnswers.Select((userAnswer, index) => (index, userAnswer)).Reverse().ToList())" OverscanCount="10">
                     <ItemContent>
                         <tr class="@(a.userAnswer.AnsweredCorrectly ? "table-success" : "table-danger")">
-                            <td>@(a.index)</td>
+                            <td>@(a.index + 1)</td>
                             <td>@(a.userAnswer.Question)</td>
                             <td>@(ConvertValue(a.userAnswer.GivenAnswer))</td>
                             <td>@(ConvertValue(a.userAnswer.CorrectAnswer))</td>
