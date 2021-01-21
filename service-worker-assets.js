@@ -53,7 +53,7 @@
       "url": "img\/github.png"
     },
     {
-      "hash": "sha256-I3VzpX9vNx658DFfPqAlDvwqqJ\/FaQNcqo6VCSRVdeY=",
+      "hash": "sha256-TFsHztJGANxH+dTI7BbgFTUG+TM64SCYYK+M\/crpSRA=",
       "url": "index.html"
     },
     {
@@ -87,6 +87,10 @@
     {
       "hash": "sha256-rip887O\/MzF0Xf3GXtIvfySYu+t66+HDS8TyLMVM1Ss=",
       "url": "_framework\/dotnet.5.0.0.js"
+    },
+    {
+      "hash": "sha256-bj33XtWIVWfAm53Epwk06V+EjqlHtKHIPkdOXE9smHM=",
+      "url": "DayOfTheWeekChallenge.styles.css"
     },
     {
       "hash": "sha256-1DzCJ+2eiXT\/M9r7UtfJnRHxSrsuc29tr+HLj0fel+E=",
@@ -185,7 +189,7 @@
       "url": "_framework\/System.IO.Pipelines.dll"
     },
     {
-      "hash": "sha256-ZWi+oXPGYhcmotwOG7Kc8bQP4IFJWucFAGDMIYZLFV8=",
+      "hash": "sha256-jrSsUJ8MSgLD4mlBupzV4Vwr6O2bUoLjJNAz00sGSxk=",
       "url": "_framework\/DayOfTheWeekChallenge.dll"
     },
     {
@@ -289,7 +293,7 @@
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
-      "hash": "sha256-Q8ZKhsC4B2WVLif+SvswlGCfMSwK5Zy\/pq3T7f7BrdU=",
+      "hash": "sha256-afZjYW9PJ\/O\/6\/b4EZlZE0OH5cqabL2+Xl6C32Y5xzU=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -297,5 +301,5 @@
       "url": "_framework\/blazor.webassembly.js"
     }
   ],
-  "version": "bUHlbzES"
+  "version": "U1nbR4vL"
 };

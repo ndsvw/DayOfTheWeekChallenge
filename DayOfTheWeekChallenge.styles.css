@@ -1,0 +1,100 @@
+/* /Shared/GenericChallenge.razor.rz.scp.css */
+#challenge[b-t78dmqgjpl] {
+    border: 1px solid white;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.challenge-green-border[b-t78dmqgjpl] {
+    animation-name: challenge-animation-green-b-t78dmqgjpl;
+    animation-duration: 1.5s;
+}
+
+@keyframes challenge-animation-green-b-t78dmqgjpl {
+    from {
+        border-color: green;
+    }
+
+    to {
+        border-color: white;
+    }
+}
+
+.challenge-red-border[b-t78dmqgjpl] {
+    animation-name: challenge-animation-red-b-t78dmqgjpl;
+    animation-duration: 1.5s;
+}
+
+@keyframes challenge-animation-red-b-t78dmqgjpl {
+    from {
+        border-color: red;
+    }
+
+    to {
+        border-color: white;
+    }
+}
+/* /Shared/SwitchElement.razor.rz.scp.css */
+/* The switch - the box around the slider */
+.switch[b-59u6bcrqvx] {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+    /* Hide default HTML checkbox */
+    .switch input[b-59u6bcrqvx] {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+/* The slider */
+.slider[b-59u6bcrqvx] {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+    .slider[b-59u6bcrqvx]:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+input:checked + .slider[b-59u6bcrqvx] {
+    background-color: #2196F3;
+}
+
+input:focus + .slider[b-59u6bcrqvx] {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider[b-59u6bcrqvx]:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round[b-59u6bcrqvx] {
+    border-radius: 34px;
+}
+
+    .slider.round[b-59u6bcrqvx]:before {
+        border-radius: 50%;
+    }
