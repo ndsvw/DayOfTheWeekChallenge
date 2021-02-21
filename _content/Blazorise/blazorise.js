@@ -188,9 +188,9 @@ window.blazorise = {
         }
     },
 
-    tryClose: (closable, targetElementId, isEscapeKey) => {
+    tryClose: (closable, targetElementId, isEscapeKey, isChildClicked) => {
         let request = new Promise((resolve, reject) => {
-            closable.dotnetAdapter.invokeMethodAsync('SafeToClose', targetElementId, isEscapeKey ? 'escape' : 'leave')
+            closable.dotnetAdapter.invokeMethodAsync('SafeToClose', targetElementId, isEscapeKey ? 'escape' : 'leave', isChildClicked)
                 .then((result) => resolve({ elementId: closable.elementId, dotnetAdapter: closable.dotnetAdapter, status: result === true ? 'ok' : 'cancelled' }))
                 .catch(() => resolve({ elementId: closable.elementId, status: 'error' }));
         });
@@ -431,8 +431,13 @@ window.blazorise = {
         }
     },
     fileEdit: {
+        _instances: [],
+
         initialize: (adapter, element, elementId) => {
             var nextFileId = 0;
+
+            // save an instance of adapter
+            window.blazorise.fileEdit._instances[elementId] = new window.blazorise.FileEditInfo(adapter, element, elementId);
 
             element.addEventListener('change', function handleInputFileChange(event) {
                 // Reduce to purely serializable data, plus build an index by ID
@@ -461,7 +466,24 @@ window.blazorise = {
             return true;
         },
         destroy: (element, elementId) => {
-            // TODO:
+            var instances = window.blazorise.fileEdit._instances || {};
+            delete instances[elementId];
+            return true;
+        },
+
+        reset: (element, elementId) => {
+            if (element) {
+                element.value = '';
+
+                var fileEditInfo = window.blazorise.fileEdit._instances[elementId];
+
+                if (fileEditInfo) {
+                    fileEditInfo.adapter.invokeMethodAsync('NotifyChange', []).then(null, function (err) {
+                        throw new Error(err);
+                    });
+                }
+            }
+
             return true;
         },
 
@@ -510,6 +532,12 @@ window.blazorise = {
                 element.click();
             }
         }
+    },
+
+    FileEditInfo: function (adapter, element, elementId) {
+        this.adapter = adapter;
+        this.element = element;
+        this.elementId = elementId;
     },
 
     breakpoint: {
@@ -567,7 +595,7 @@ document.addEventListener('click', function handler(evt) {
         const lastClosable = window.blazorise.closableComponents[window.blazorise.closableComponents.length - 1];
 
         if (lastClosable) {
-            window.blazorise.tryClose(lastClosable, evt.target.id, false);
+            window.blazorise.tryClose(lastClosable, evt.target.id, false, hasParentInTree(evt.target, lastClosable.elementId));
         }
     }
 });
@@ -577,7 +605,7 @@ document.addEventListener('keyup', function handler(evt) {
         const lastClosable = window.blazorise.closableComponents[window.blazorise.closableComponents.length - 1];
 
         if (lastClosable) {
-            window.blazorise.tryClose(lastClosable, lastClosable.elementId, true);
+            window.blazorise.tryClose(lastClosable, lastClosable.elementId, true, false);
         }
     }
 });
@@ -648,6 +676,12 @@ function getArrayBufferFromFileAsync(elem, fileId) {
     }
 
     return file.readPromise;
+}
+
+function hasParentInTree(element, parentElementId) {
+    if (!element.parentElement) return false;
+    if (element.parentElement.id == parentElementId) return true;
+    return hasParentInTree(element.parentElement, parentElementId);
 }
 
 var uint8ToBase64 = (function () {
