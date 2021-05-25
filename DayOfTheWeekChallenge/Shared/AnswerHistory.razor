@@ -17,23 +17,24 @@
                         <th scope="col">Time</th>
                     </tr>
                 </thead>
-                 
-                <Virtualize Context="a" Items="@(UserAnswers.Select((userAnswer, index) => (index, userAnswer)).Reverse().ToList())" OverscanCount="10">
-                    <ItemContent>
-                        <tr class="@(a.userAnswer.AnsweredCorrectly ? "table-success" : "table-danger")">
-                            <td>@(a.index + 1)</td>
-                            <td>@(a.userAnswer.Question)</td>
-                            <td>@(ConvertValue(a.userAnswer.GivenAnswer))</td>
-                            <td>@(ConvertValue(a.userAnswer.CorrectAnswer))</td>
-                            <td>@(((int)a.userAnswer.Time.TotalMilliseconds).ToString("N0")) ms</td>
-                        </tr>
-                    </ItemContent>
-                    <Placeholder>
-                        <p>
-                            Loading&hellip;
-                        </p>
-                    </Placeholder>
-                </Virtualize>
+                <tbody>
+                    <Virtualize Context="a" Items="@(UserAnswers.Select((userAnswer, index) => (index, userAnswer)).Reverse().ToList())" OverscanCount="10">
+                        <ItemContent>
+                            <tr class="@(a.userAnswer.AnsweredCorrectly ? "table-success" : "table-danger")">
+                                <td>@(a.index + 1)</td>
+                                <td>@(a.userAnswer.Question)</td>
+                                <td>@(ConvertValue(a.userAnswer.GivenAnswer))</td>
+                                <td>@(ConvertValue(a.userAnswer.CorrectAnswer))</td>
+                                <td>@(((int)a.userAnswer.Time.TotalMilliseconds).ToString("N0")) ms</td>
+                            </tr>
+                        </ItemContent>
+                        <Placeholder>
+                            <p>
+                                Loading&hellip;
+                            </p>
+                        </Placeholder>
+                    </Virtualize>
+                </tbody>
             </table>
         </div>
     </div>
