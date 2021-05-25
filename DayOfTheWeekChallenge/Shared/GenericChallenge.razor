@@ -4,7 +4,9 @@
 @inject IJSRuntime JS;
 
 <div class="noselect pt-2 pb-2" id="challenge" @ref="challengeElement">
-    <div class="alert alert-primary font-weight-bold ml-4 mr-2" role="alert" style="display: inline-block">@Question</div>
+    <div class="alert alert-primary font-weight-bold ml-4 mr-2"
+         role="alert"
+         style="display: inline-block; font-weight: bolder;">@Question</div>
     <i class="fas fa-redo border rounded-circle p-2" style="cursor: pointer;" @onclick="GenerateNewQuestion"></i>
 
     <div>
