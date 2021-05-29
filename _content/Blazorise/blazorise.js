@@ -3,6 +3,8 @@ if (!window.blazorise) {
 }
 
 window.blazorise = {
+    lastClickedDocumentElement: null,
+
     utils: {
         getRequiredElement: (element, elementId) => {
             if (element)
@@ -25,6 +27,7 @@ window.blazorise = {
         }
         return true;
     },
+
     // toggles a classname on the given element id
     toggleClass: (element, classname) => {
         if (element) {
@@ -53,6 +56,13 @@ window.blazorise = {
             return element.parentElement.classList.contains(classname);
         }
         return false;
+    },
+
+    // sets the value to the element property
+    setProperty: (element, property, value) => {
+        if (element && property) {
+            element[property] = value;
+        }
     },
 
     getElementInfo: (element, elementId) => {
@@ -144,6 +154,24 @@ window.blazorise = {
         return opts;
     },
 
+    setSelectedOptions: (elementId, values) => {
+        const element = document.getElementById(elementId);
+
+        if (element && element.options) {
+            const len = element.options.length;
+
+            for (var i = 0; i < len; i++) {
+                const opt = element.options[i];
+
+                if (values && values.find(x => x !== null && x.toString() === opt.value)) {
+                    opt.selected = true;
+                } else {
+                    opt.selected = false;
+                }
+            }
+        }
+    },
+
     // holds the list of components that are triggers to close other components
     closableComponents: [],
 
@@ -175,16 +203,20 @@ window.blazorise = {
         return false;
     },
 
-    registerClosableComponent: (elementId, dotnetAdapter) => {
-        if (window.blazorise.isClosableComponent(elementId) !== true) {
-            window.blazorise.addClosableComponent(elementId, dotnetAdapter);
+    registerClosableComponent: (element, dotnetAdapter) => {
+        if (element) {
+            if (window.blazorise.isClosableComponent(element.id) !== true) {
+                window.blazorise.addClosableComponent(element.id, dotnetAdapter);
+            }
         }
     },
 
-    unregisterClosableComponent: (elementId) => {
-        const index = window.blazorise.findClosableComponentIndex(elementId);
-        if (index !== -1) {
-            window.blazorise.closableComponents.splice(index, 1);
+    unregisterClosableComponent: (element) => {
+        if (element) {
+            const index = window.blazorise.findClosableComponentIndex(element.id);
+            if (index !== -1) {
+                window.blazorise.closableComponents.splice(index, 1);
+            }
         }
     },
 
@@ -292,6 +324,11 @@ window.blazorise = {
             return true;
         },
         keyDown: (validator, e) => {
+            if (e.target.readOnly) {
+                e.preventDefault();
+                return true;
+            }
+
             if (e.which === 38) {
                 validator.stepApply(1);
             } else if (e.which === 40) {
@@ -339,7 +376,7 @@ window.blazorise = {
                 selection = this.carret();
 
             if (value = value.substring(0, selection[0]) + currentValue + value.substring(selection[1]), !!this.regex().test(value)) {
-                return value = (value || "").replace(this.separator, "."), value === "-" && this.min < 0 || value >= this.min && value <= this.max;
+                return value = (value || "").replace(this.separator, ".");
             }
 
             return false;
@@ -590,8 +627,14 @@ window.blazorise = {
     }
 };
 
-document.addEventListener('click', function handler(evt) {
-    if (window.blazorise.closableComponents && window.blazorise.closableComponents.length > 0) {
+
+
+document.addEventListener('mousedown', function handler(evt) {
+    window.blazorise.lastClickedDocumentElement = evt.target;
+});
+
+document.addEventListener('mouseup', function handler(evt) {
+    if (evt.target === window.blazorise.lastClickedDocumentElement && window.blazorise.closableComponents && window.blazorise.closableComponents.length > 0) {
         const lastClosable = window.blazorise.closableComponents[window.blazorise.closableComponents.length - 1];
 
         if (lastClosable) {
@@ -680,7 +723,7 @@ function getArrayBufferFromFileAsync(elem, fileId) {
 
 function hasParentInTree(element, parentElementId) {
     if (!element.parentElement) return false;
-    if (element.parentElement.id == parentElementId) return true;
+    if (element.parentElement.id === parentElementId) return true;
     return hasParentInTree(element.parentElement, parentElementId);
 }
 
