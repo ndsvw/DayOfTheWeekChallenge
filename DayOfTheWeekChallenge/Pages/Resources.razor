@@ -3,66 +3,60 @@
 
 <div class="container">
     <h1 style="text-align: center;">Resources</h1>
-    <div class="accordion" id="resourceTablesAccordion">
 
-        <div class="card">
-            <div class="card-header" id="resource1">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
-                        Days of the week - Numeric
-                    </button>
-                </h2>
-            </div>
-            <div id="collapse1" class="collapse show" aria-labelledby="resource1" data-parent="#resourceTablesAccordion">
-                <div class="card-body">
+    <div class="accordion" id="accordionExample">
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Days of the week - Numeric
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
                     <TableDayOfTheWeekNumeric />
                 </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header" id="resource2">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                        Months - Numeric
-                    </button>
-                </h2>
-            </div>
-            <div id="collapse2" class="collapse" aria-labelledby="resource2" data-parent="#resourceTablesAccordion">
-                <div class="card-body">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Months - Numeric
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
                     <TableMonthsNumeric />
                 </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header" id="resource3">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
-                        Years - Numeric
-                    </button>
-                </h2>
-            </div>
-            <div id="collapse3" class="collapse" aria-labelledby="resource3" data-parent="#resourceTablesAccordion">
-                <div class="card-body">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Years - Numeric
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
                     <TableYearsNumberic />
                 </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header" id="resource4">
-                <h2 class="mb-0">
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                        Centenaries - Numeric
-                    </button>
-                </h2>
-            </div>
-            <div id="collapse4" class="collapse" aria-labelledby="resource4" data-parent="#resourceTablesAccordion">
-                <div class="card-body">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingFour">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Centenaries - Numeric
+                </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
                     <TableCentenaryNumeric />
                 </div>
             </div>
         </div>
+
     </div>
 </div>
