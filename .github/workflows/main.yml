@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ master ]
+    
+permissions:
+  contents: write
 
 jobs:
   deploy-to-github-pages:
