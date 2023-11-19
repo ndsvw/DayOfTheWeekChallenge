@@ -37,8 +37,8 @@ jobs:
       run: touch DayOfTheWeekChallenge/release/wwwroot/.nojekyll
       
     - name: Commit wwwroot to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4.4.3
+      uses: JamesIves/github-pages-deploy-action@v3.7.1
       with:
-        token: ${{ secrets.PUBLISH_TOKEN }}
-        branch: gh-pages
-        folder: DayOfTheWeekChallenge/release/wwwroot
+        GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: DayOfTheWeekChallenge/release/wwwroot
