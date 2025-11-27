@@ -18,9 +18,9 @@ jobs:
     
     # sets up .NET
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v5
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 9.0.x
 
     # publishes Blazor project to the release-folder
     - name: Publish .NET Core Project
