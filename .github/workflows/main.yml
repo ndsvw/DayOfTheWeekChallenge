@@ -36,10 +36,8 @@ jobs:
     - name: Add .nojekyll file
       run: touch DayOfTheWeekChallenge/release/wwwroot/.nojekyll
 
-    # status code 128 all the time...
-    #- name: Commit wwwroot to GitHub Pages
-    #  uses: JamesIves/github-pages-deploy-action@v3.7.1
-    #  with:
-    #    GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
-    #    BRANCH: gh-pages
-    #    FOLDER: DayOfTheWeekChallenge/release/wwwroot
+    - name: Deploy wwwroot to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4.7.4
+      with:
+        branch: gh-pages
+        folder: DayOfTheWeekChallenge/release/wwwroot
